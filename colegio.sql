@@ -55,11 +55,64 @@ INSERT INTO matricula (fecha_inicio, fecha_fin, estado, resultado, cod_asignatur
 ('2022-03-30', '2024-09-02', TRUE, 4.0, 'CAS1', 2),
 ('2025-04-25', '2027-08-15', FALSE, 4.4, 'SOC1', 4);
 
+/* SELECT WHERE AND OR */
+SELECT cod_asignatura, id_estudiante, resultado FROM matricula WHERE cod_asignatura = 'MAT1' AND resultado >= 4.0;
+SELECT cod_asignatura, id_estudiante, resultado FROM matricula WHERE cod_asignatura = 'MAT1' OR cod_asignatura = 'SOC1';
+SELECT cod_asignatura, id_estudiante, resultado FROM matricula WHERE resultado > 3 AND (cod_asignatura = 'MAT1' OR cod_asignatura = 'SOC1');
+
+/* ORDER BY */
+SELECT nombre, apellido FROM estudiante ORDER BY nombre ASC; /* DESC */
+SELECT cod_asignatura, resultado FROM matricula ORDER BY resultado DESC; /* ASC */
+
+SELECT cod_asignatura, id_estudiante, resultado FROM matricula WHERE cod_asignatura = 'MAT1' OR cod_asignatura = 'SOC1' ORDER BY resultado DESC;
+
+/* BETWEEN */
+SELECT cod_asignatura, resultado FROM matricula WHERE resultado BETWEEN  0.0 AND 3.0;
+
+/*  IN ('FDB', 'DGBD') */
+SELECT nombre, apellido FROM estudiante WHERE apellido NOT IN ('Arias', 'Zapata');
+
+/* LIKE 'NOM%' */
+SELECT nombre, apellido, correo FROM estudiante WHERE nombre LIKE 'E%'; /* busca el que empiece por E */
+SELECT nombre, apellido, correo FROM estudiante WHERE nombre LIKE '%E'; /* busca el que empiece despues */
+SELECT nombre, apellido, correo FROM estudiante WHERE nombre LIKE '%E%'; /* busca el que tenga esa letra o palabra */
+
+/* Fechas */
+SELECT cod_asignatura, id_estudiante, fecha_inicio FROM matricula WHERE fecha_inicio < '2022:01:01';
+SELECT cod_asignatura, id_estudiante, fecha_inicio FROM matricula WHERE fecha_inicio < '2022@01@01';
+SELECT cod_asignatura, id_estudiante, fecha_inicio FROM matricula WHERE fecha_inicio < '2022/01/01';
+SELECT cod_asignatura, id_estudiante, fecha_inicio FROM matricula WHERE fecha_inicio < '2022.01.01';
+
+/* COUNT (*) contar numero de filas */
+SELECT COUNT(resultado) AS aprobados FROM matricula WHERE resultado>=3;
+SELECT COUNT(resultado) AS Desaprobado FROM matricula WHERE resultado<=3;
+
+/* COUNT ( DISTINCT ) si se repiten se cuentan 1 sola vez*/
+SELECT COUNT(DISTINCT resultado) AS cuantos FROM matricula; 
+
+/* SUM () suma*/
+SELECT SUM(resultado) AS total, SUM(resultado/5) AS promedio FROM matricula;
+
+/* AVG () para promedio */
+SELECT AVG(resultado) AS promedio FROM matricula;
+
+/* MIN minimo valor */
+SELECT cod_asignatura, MIN(resultado) FROM matricula; /* error con coinciden con los datos vinculados*/
+
+/* MAX */
+SELECT cod_asignatura, MAX(resultado) FROM matricula; /* error */
+
+/* Subconsulta soluciona el MIN y el MAX*/
+SELECT cod_asignatura, resultado FROM matricula WHERE resultado = (SELECT MIN(resultado) FROM matricula);
+SELECT cod_asignatura, resultado FROM matricula WHERE resultado = (SELECT MAX(resultado) FROM matricula);
+
+
+/* UPDATE */
 UPDATE estudiante SET nombre = 'Brayan' WHERE id_estudiante = 1;
 UPDATE estudiante SET nombre = 'Fredy' WHERE id_estudiante = 2;
 UPDATE estudiante SET nombre = 'María' WHERE id_estudiante = 3;
 
-
+/* DELETE */
 DELETE FROM matricula WHERE id_matricula = 5;
 DELETE FROM matricula WHERE id_matricula = 4;
 DELETE FROM matricula WHERE id_matricula = 3;

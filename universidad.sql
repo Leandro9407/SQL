@@ -87,12 +87,77 @@ INNER JOIN asignatura ON imparte.cod_asignatura = asignatura.cod_asignatura;
 DESCRIBE profesores;
 
 
+/* Select WHERE AND OR */
+SELECT * FROM profesores WHERE apellido = 'Pérez' OR apellido = 'López';
+SELECT * FROM profesores WHERE apellido = 'Osorio' AND especialidad = 'Biología';
+
+SELECT cod_asignatura, nombre, numero_horas FROM asignatura WHERE cod_asignatura = 'FIS1' AND numero_horas >= 45;
+
+SELECT cod_asignatura, nombre, numero_horas FROM asignatura WHERE cod_asignatura = 'FIS1' OR cod_asignatura = 'ING1';
+SELECT cod_asignatura, nombre, numero_horas FROM asignatura WHERE numero_horas > 30 AND (cod_asignatura = 'BIO1' OR cod_asignatura = 'FIS1');
+
+/* ORDER BY */
+SELECT nombre, apellido FROM profesores ORDER BY nombre ASC; /* DESC */
+
+SELECT  nombre, apellido, fecha_ingreso, correo, estado FROM profesores ORDER BY fecha_ingreso DESC;
+SELECT  nombre, apellido, fecha_ingreso, correo, estado FROM profesores WHERE estado = true ORDER BY fecha_ingreso DESC;
+
+/* Between */
+SELECT nombre, apellido, correo, fecha_ingreso FROM profesores WHERE fecha_ingreso BETWEEN '2022-01-01' AND '2025-03-26' ORDER BY fecha_ingreso DESC;
+SELECT nombre, numero_horas FROM asignatura WHERE numero_horas BETWEEN '40' AND '45';
+
 /* update simples */
 UPDATE profesores SET nombre = 'Juan Carlos' WHERE profesores.id_profe = 1;
 UPDATE profesores SET nombre = 'María Eugenia' WHERE id_profe = 2;
 UPDATE profesores SET nombre = 'Ana María' WHERE correo = 'ana.lopez@gmail.com';
 
+/* IN ('FDB', 'DGBD') */
+SELECT cod_asignatura, nombre FROM asignatura WHERE cod_asignatura IN ('HIS1', 'FIS1', 'ING1');
+SELECT nombre, apellido, especialidad FROM profesores WHERE especialidad IN ('Física', 'Biología', 'Inglés');
+SELECT nombre, apellido, especialidad FROM profesores WHERE especialidad NOT IN ('Física', 'Biología', 'Inglés');
+
 UPDATE profesores SET nombre = 'Pedro José', apellido = 'Fernández Castro' WHERE id_profe = 5;
+
+/* LIKE 'NOM%' */
+SELECT nombre, apellido, correo FROM estudiante
+
+/* Fechas */
+SELECT nombre, apellido, fecha_ingreso FROM profesores WHERE fecha_ingreso < '2022:01:01';
+/*  '2022:01:01
+    '2022@01@01 
+    '2022/01/01 
+    '2022.01.01  */
+
+/* NOW(); CURDATE(); CURTIME(); */
+SELECT NOW(); /* fecha y hora */
+SELECT CURDATE(); /* fecha */
+SELECT CURTIME(); /* hora */
+
+SELECT NOW() AS Ahora, CURDATE() AS Fecha, CURTIME() AS Hora; /* AS nombre tabla */
+
+SELECT nombre, DATE_FORMAT(fecha_ingreso, '%d/%m/%Y') AS fecha FROM profesores; /* Y = año completo y = numero final */
+
+SELECT DAY(fecha_ingreso) AS dia, MONTH(fecha_ingreso) AS mes, YEAR(fecha_ingreso) AS año FROM profesores WHERE nombre = 'Carlos';
+
+SELECT nombre, fecha_ingreso FROM profesores WHERE YEAR(fecha_ingreso) = '2020';
+
+SELECT DAYNAME(fecha_ingreso) AS dia, DAYOFWEEK(fecha_ingreso) AS numdia, MONTHNAME (fecha_ingreso) AS mes FROM profesores WHERE nombre = 'Jhon';
+
+/* Operaciones */
+Cuantos creditos tiene una asignatura?
+
+SELECT nombre, numero_horas, numero_horas/48 AS creditos FROM asignatura;
+/* ROUND */
+SELECT nombre, numero_horas, ROUND(numero_horas/48, 2) AS creditos FROM asignatura; /* para redondear ROUND */
+
+/* COUNT (*) contar numero de filas */
+SELECT COUNT(cod_asignatura) AS numero_asignaturas FROM asignatura;
+SELECT COUNT(numero_horas) AS horas FROM asignatura WHERE numero_horas>=38;
+
+/* SUM () suma*/
+SELECT SUM(numero_horas) AS total, SUM(numero_horas/48) AS creditos FROM asignatura;
+
+
 
 /* delete */
 DELETE FROM profesores WHERE id_profe = 2;
