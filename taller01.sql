@@ -161,7 +161,7 @@ SELECT AVG(total_ventas_dinero) AS promedio FROM empleados;
 SELECT MIN(precio) FROM productos;
 SELECT MAX(precio) FROM productos;
 
-/* SUBCONSULTA SOLUCIONA EL MIN Y MAX */
+/* SUBCONSULTA SOLUCIONA EL MIN Y MAX | SOLO DEBE USARSE EN EL WHERE*/
 SELECT nombre_producto, precio FROM productos WHERE precio = (SELECT MIN(precio) FROM productos);
 SELECT nombre_producto, precio FROM productos WHERE precio = (SELECT MAX(precio) FROM productos);
 
@@ -176,12 +176,16 @@ SELECT nombre_producto, precio FROM productos WHERE precio = (SELECT MAX(precio)
 
 /* JOIN */
 
-SELECT empleados.nombre_empleado, productos.nombre_producto, ventas.cantidad, productos.precio, SUM(vendido.cantidad * productos.precio) AS Total
+SELECT empleados.nombre_empleado, productos.nombre_producto, ventas.cantidad, productos.precio, SUM(ventas.cantidad * productos.precio) AS Total
 FROM ventas INNER JOIN empleados ON ventas.id_empleado = empleados.id_empleado INNER JOIN productos ON ventas.id_producto = productos.id_producto
 GROUP BY empleados.nombre_empleado, productos.nombre_producto, ventas.cantidad, productos.precio;
 
-SELECT empleados.nombre_empleado, productos.nombre_producto, ventas.cantidad AS Ventas
-FROM ventas INNER JOIN empleados ON ventas.id_empleado = empleados.id_empleado INNER JOIN productos ON ventas.id_producto = productos.id_producto WHERE ventas.cantidad = 0;
+SELECT empleados.id_empleado, empleados.nombre_empleado, SUM(ventas.cantidad * productos.precio) AS Total
+FROM ventas INNER JOIN empleados ON ventas.id_empleado = empleados.id_empleado INNER JOIN productos ON ventas.id_producto = productos.id_producto
+GROUP BY empleados.id_empleado, empleados.nombre_empleado;
+
+SELECT empleados.nombre_empleado, ventas.cantidad AS Ventas
+FROM ventas INNER JOIN empleados ON ventas.id_empleado = empleados.id_empleado WHERE ventas.cantidad = 0;
 
 SELECT productos.nombre_producto, productos.precio, ventas.cantidad 
 FROM ventas INNER JOIN productos ON ventas.id_producto = productos.id_producto WHERE ventas.cantidad = 0;
@@ -193,7 +197,23 @@ FROM ventas INNER JOIN productos ON ventas.id_producto = productos.id_producto W
 -- El nombre del producto que mas se ha vendido en cantidad.
 -- El nombre del producto que mas se ha vendido en precio.
 
--- nombre de los empleados y cuantas ventas tiene registradas en la tabla ventas.  
+-- nombre de los empleados y cuantas ventas tiene registradas en la tabla ventas. 
+SELECT empleados.id_empleado, empleados.nombre_empleado, COUNT(ventas.cantidad) AS Cantidas_ventas FROM empleados INNER JOIN ventas ON empleados.id_empleado = ventas.id_empleado
+GROUP BY empleados.id_empleado, empleados.nombre_empleado;
+
+--nombre de los empleados y cantidad de productos que tien registradas en la tabla ventas.
+SELECT empleados.id_empleado, empleados.nombre_empleado, SUM(ventas.cantidad) AS Cantidad_productos FROM empleados INNER JOIN ventas ON empleados.id_empleado = ventas.id_empleado
+GROUP BY empleados.id_empleado, empleados.nombre_empleado;
+
 -- nombre de los empleados y cuanto ha vendido en dinero registrado en ventas (cantidad*precio) filtrado por una fecha determinada.
 
 --todos los empleatos que no han vendido y todos los productos que no se han vendido.
+
+
+----
+SELECT empleados.id_empleado, ventas.fecha, empleados.nombre_empleado, ventas.cantidad
+FROM empleados
+INNER JOIN ventas ON empleados.id_empleado = ventas.id_empleado;
+
+/* NUNCA HACER | GENERA PRODUCTO CARTESIONA Y TRAE TODOS LOS REGISTROS                                                                    */
+FROM empleados, ventas
