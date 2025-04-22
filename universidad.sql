@@ -219,19 +219,24 @@ SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM pro
 SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores RIGHT JOIN facultades ON profesores.facultad = facultades.id_facultad;
 
  /* RIGHT JOIN IS NULL | FILTRA SOLO LOS REGISTROS DE LA TABLA DERECHA QUE NO TIENEN COINCIDENCIA EN LA TABLA IZQUIERDA */
-SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores RIGHT JOIN facultades ON profesores.facultad = facultades.id_facultad WHERE profesores.nombre IS NULL;
+SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores 
+RIGHT JOIN facultades ON profesores.facultad = facultades.id_facultad WHERE profesores.nombre IS NULL;
 
 
 /* LEFT JOIN | RECUPERA TODOS LOS REGISTROS DE LA TABLA IZQUIERDA Y SOLO LOS REGISTROS COINCIDENTES DE LA TABLA DERECHA */
-SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores LEFT JOIN facultades ON profesores.facultad = facultades.id_facultad;
+SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores 
+LEFT JOIN facultades ON profesores.facultad = facultades.id_facultad;
 
 /* LEFT JOIN IS NULL | FILTRA SOLO LOS REGISTROS DE LA TABLA DERECHA QUE NO TIENEN COINCIDENCIA EN LA TABLA DERECHA */
 SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores LEFT JOIN facultades ON profesores.facultad = facultades.id_facultad WHERE profesores.nombre IS NULL;
 
 
 /* RIGHT Y LEFT */
-SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores LEFT JOIN facultades ON profesores.facultad = facultades.id_facultad
-UNION SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores RIGHT JOIN facultades ON profesores.facultad = facultades.id_facultad;
+SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores 
+LEFT JOIN facultades ON profesores.facultad = facultades.id_facultad
+UNION 
+SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores 
+RIGHT JOIN facultades ON profesores.facultad = facultades.id_facultad;
 
 /* RIGHT Y LEFT IS NULL */
 SELECT profesores.nombre, profesores.correo, facultades.nombre_facultad FROM profesores LEFT JOIN facultades ON profesores.facultad = facultades.id_facultad WHERE facultades.id_facultad IS NULL

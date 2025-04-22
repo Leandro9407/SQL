@@ -110,7 +110,7 @@ SELECT nombre_producto, precio FROM productos WHERE precio BETWEEN 1400 AND 2300
 SELECT * FROM empleados ORDER BY nombre_empleado ASC;
 SELECT * FROM productos ORDER BY nombre_producto DESC;
 
-/* IN, NOT IN('FDB', 'DGBD') | CONSULTAR SOLO ESOS REGISTROS (IN) O QUE NO ESTEN ESOS REGISTROS (NOT IN) */
+/* IN, NOT IN('FDB', 'DGBD') | CONSULTAR SOLO ESOS REGISTROS con (IN), O QUE NO ESTEN ESOS REGISTROS (NOT IN) */
 SELECT nombre_producto, precio FROM productos WHERE nombre_producto IN ('Caramelos Surtidos', 'Malvaviscos', 'Pastel de vainilla');
 SELECT nombre_producto, precio FROM productos WHERE nombre_producto NOT IN ('Chocolatina', 'Brownie de chocolate', 'Turrón de maní');
 
@@ -191,6 +191,12 @@ SELECT productos.nombre_producto, productos.precio, ventas.cantidad
 FROM ventas INNER JOIN productos ON ventas.id_producto = productos.id_producto WHERE ventas.cantidad = 0;
 
 -- nombre de los empleados, nombre de los productos, cantidad, precio y precio total de todas las ventas.
+SELECT empleados.nombre_empleado, producto.nombre_producto, ventas.cantidad, producto.precio, SUM(ventas.cantidad * producto.precio) AS total_ventas
+FROM ventas 
+INNER JOIN empleados ON ventas.id_empleado = empleados.id_empleado 
+INNER JOIN productos ON venta.id_producto = productos.id_producto
+GROUP BY empleados.nombre_empleado, producto.nombre_producto, ventas.cantidad, producto.precio; 
+
 -- nombre de los empleados que no han vendido nada.
 -- nombre de los productos que no se han vendido.
 
