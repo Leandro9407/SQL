@@ -190,6 +190,21 @@ FROM ventas INNER JOIN empleados ON ventas.id_empleado = empleados.id_empleado W
 SELECT productos.nombre_producto, productos.precio, ventas.cantidad 
 FROM ventas INNER JOIN productos ON ventas.id_producto = productos.id_producto WHERE ventas.cantidad = 0;
 
+/* LIMIT OFFSET | PARA PONER LIMITE E INICIALIZADOR | UTIL PARA PAGINACION PAGINACION */
+SELECT nombre_empleado
+FROM empleados
+LIMIT 3;
+
+SELECT nombre_empleado
+FROM empleados
+LIMIT 5
+OFFSET 2;
+
+/* HAVING  */
+SELECT ventas.id_empleado, COUNT(ventas.id_venta) AS total_ventas FROM ventas
+GROUP BY ventas.id_empleado
+HAVING COUNT(ventas.id_empleado) > 1;
+
 -- nombre de los empleados, nombre de los productos, cantidad, precio y precio total de todas las ventas.
 SELECT empleados.nombre_empleado, producto.nombre_producto, ventas.cantidad, producto.precio, SUM(ventas.cantidad * producto.precio) AS total_ventas
 FROM ventas 
@@ -223,3 +238,21 @@ INNER JOIN ventas ON empleados.id_empleado = ventas.id_empleado;
 
 /* NUNCA HACER | GENERA PRODUCTO CARTESIONA Y TRAE TODOS LOS REGISTROS                                                                    */
 FROM empleados, ventas
+
+
+-- Id Empleados con más de 1 venta
+SELECT empleados.id_empleado, empleados.nombre_empleado, SUM(ventas.cantidad) AS Ventas FROM empleados INNER JOIN ventas ON ventas.id_empleado = empleados.id_empleado
+WHERE ventas.cantidad > 1
+GROUP BY empleados.id_empleado, empleados.nombre_empleado ORDER BY Ventas;
+
+SELECT ventas.id_empleado, COUNT(ventas.id_venta) AS total_ventas FROM ventas
+GROUP BY ventas.id_empleado
+HAVING COUNT(ventas.id_empleado) > 1;
+
+-- Id Empleados que han vendido más de 5 productos en total
+-- Id y nombre de empleados que han vendido más de 5 productos en total
+-- Id y nombre de empleados con ventas totales en dinero superiores a $1,000,000
+-- Productos que se han vendido más de 2 veces
+-- Empleados que han vendido Microondas
+-- Empleados que han vendido Microondas, pero mas de dos en cantidad.
+-- Fecha con más ventas registradas
